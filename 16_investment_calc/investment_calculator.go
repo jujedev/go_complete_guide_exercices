@@ -14,6 +14,7 @@ func main() {
 	var years float64
 	var nombre string
 
+	fmt.Print("Enter your name: ")
 	fmt.Scan(&nombre)
 	fmt.Println("Hello", nombre)
 

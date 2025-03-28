@@ -1,14 +1,48 @@
 package main
 
 import (
+	"errors"
 	"fmt"
+	"os"
+	"strconv"
 )
 
+const accountBalanceFile = "balance.txt"
+
+func getBalanceFromFile() (float64, error) {
+	var balanceBytes []byte
+	var err error
+	var balanceText string
+	var balance float64
+
+	balanceBytes, err = os.ReadFile(accountBalanceFile)
+	if err != nil {
+		return 1000, errors.New("Failed to find balance file.")
+	}
+	balanceText = string(balanceBytes)
+	balance, err = strconv.ParseFloat(balanceText, 64)
+	if err != nil {
+		return 1000, errors.New("Failed to parse stored balance value.")
+	}
+	return balance, nil
+}
+
+func writeBalanceToFile(balance float64) {
+	balanceText := fmt.Sprint(balance)
+	os.WriteFile(accountBalanceFile, []byte(balanceText), 0644)
+}
+
 func main() {
-	var accountBalance float64 = 1000
+	var accountBalance float64
 	var addMoney float64
 	var subMoney float64
 	var choice int
+	var err error
+
+	accountBalance, err = getBalanceFromFile()
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	fmt.Println("Welcome to Go Bank!")
 
@@ -21,6 +55,10 @@ func main() {
 
 		fmt.Print("Enter your choice: ")
 		fmt.Scan(&choice)
+		for choice < 1 || choice > 4 {
+			fmt.Print("Invalid choice. Please enter a valid choice: ")
+			fmt.Scan(&choice)
+		}
 
 		switch choice {
 		case 1:
@@ -30,6 +68,7 @@ func main() {
 			if addMoney != 0 {
 				accountBalance += addMoney
 				fmt.Println("Balance update! New ammount: $", accountBalance)
+				writeBalanceToFile(accountBalance)
 			} else {
 				fmt.Println("No money was added.")
 			}
@@ -38,6 +77,7 @@ func main() {
 			if subMoney != 0 {
 				accountBalance -= subMoney
 				fmt.Println("Balance update! New ammount: $", accountBalance)
+				writeBalanceToFile(accountBalance)
 			} else {
 				fmt.Println("No money was withdrawn.")
 			}

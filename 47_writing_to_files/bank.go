@@ -41,7 +41,9 @@ func main() {
 
 	accountBalance, err = getBalanceFromFile()
 	if err != nil {
+		fmt.Println("ERROR:")
 		fmt.Println(err)
+		fmt.Print("---------------------")
 	}
 
 	fmt.Println("Welcome to Go Bank!")

@@ -9,8 +9,8 @@ import (
 type User struct {
 	/*Si los atributos empiezan con mayuscula, permiten editar externo a la struct (publicos)
 	FirstName*/
-	firstName string
 	/*En cambio si el atributo comienza con minuscula, solo se podría editar mediante algun metodo (privado)*/
+	firstName string
 	lastName  string
 	bithDate  string
 	createdAt time.Time
